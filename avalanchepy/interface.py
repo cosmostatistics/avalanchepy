@@ -121,7 +121,7 @@ def run(log_probability: Callable, **kwargs) -> Result:
 
     log_evidence = kwargs.pop("log_evidence", None)
     n_particles_wanted = kwargs.pop("n_particles", None)
-    # TODO: should we keep the following?
+
     if log_evidence:
         if not n_particles_wanted:
             mu = kwargs.pop("mu", np.log(n_initial_particles) - log_evidence)

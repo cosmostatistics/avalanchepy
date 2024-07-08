@@ -1,6 +1,7 @@
 import contextlib
 
 import numpy as np
+import tqdm
 from tqdm.auto import trange
 
 from .collectors import Collector
@@ -33,14 +34,16 @@ def macro_sampler(
 
     rates = {"move": [0, 0], "kill": [0, 0], "spawn": [0, 0]}
 
-    t = trange(n_total_steps, desc="init", leave=True) if progress_bar else range(n_total_steps)
+    t: range | tqdm.tqdm_asyncio[int] = (
+        trange(n_total_steps, desc="init", leave=True) if progress_bar else range(n_total_steps)
+    )
 
     for i in t:
         if progress_bar and i > info_window_size and i % info_window_size == 0:
             info_str = ""
             for collector in collectors:
                 info_str += f"{collector.abbreviation} = {collector.get_recent_average(i, info_window_size):.2f}; "
-            t.set_description(info_str[:-2], refresh=True)  # type: ignore[attr-defined]
+            t.set_description(info_str[:-2], refresh=True)
 
         # abort if there are no chains left
         if pos.shape[0] <= 2:

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable
+from typing import Any, Callable
 
 import numpy as np
 
@@ -32,7 +32,7 @@ class Collector(ABC):
     def get_clean(self, i: int) -> np.ndarray:
         return self.values[self.burn_in :: self.thinning]
 
-    def get_recent_average(self, i: int, window_size: int = 100) -> np.float64:
+    def get_recent_average(self, i: int, window_size: int = 100) -> Any:
         return np.mean(self.values[i - window_size : i])
 
 
@@ -70,7 +70,7 @@ class Hamiltonian(Collector):
         expected_length: int,
         burn_in: int,
         thinning: int,
-        log_probability: Callable[[np.ndarray], np.ndarray[float]],
+        log_probability: Callable[[np.ndarray], np.ndarray],
     ):
         super().__init__("hamiltonian", expected_length, burn_in, thinning)
         self.hamiltonian = lambda state: np.sum(log_probability(state))

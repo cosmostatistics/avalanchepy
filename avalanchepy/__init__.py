@@ -12,7 +12,7 @@ list of `collectors`.
 
 To keep the code modular, one may combine different updaters and collectors. In
 particular, alternating between updates of the positions and 'kill/spawn' steps
-is handled by this. Similairly, there are collectors for multiple observables
+is handled by this. Similarly, there are collectors for multiple observables
 available, alternatively, one may define ones own.
 
 All of this is wrapped by the `run` function in `interface.py` that returns

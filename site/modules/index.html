@@ -413,7 +413,7 @@ updated by an <code>updater</code>, then all possible ovservables are measured b
 list of <code>collectors</code>.</p>
 <p>To keep the code modular, one may combine different updaters and collectors. In
 particular, alternating between updates of the positions and 'kill/spawn' steps
-is handled by this. Similairly, there are collectors for multiple observables
+is handled by this. Similarly, there are collectors for multiple observables
 available, alternatively, one may define ones own.</p>
 <p>All of this is wrapped by the <code>run</code> function in <code>interface.py</code> that returns
 a <code>Result</code> object.</p>
@@ -599,8 +599,7 @@ a <code>Result</code> object.</p>
 
           <details class="quote">
             <summary>Source code in <code>avalanchepy/sampler.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">10</span>
-<span class="normal">11</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
@@ -659,7 +658,10 @@ a <code>Result</code> object.</p>
 <span class="normal">67</span>
 <span class="normal">68</span>
 <span class="normal">69</span>
-<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">macro_sampler</span><span class="p">(</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">macro_sampler</span><span class="p">(</span>
     <span class="n">updater</span><span class="p">:</span> <span class="n">MCMCUpdater</span><span class="p">,</span>
     <span class="n">n_total_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">initial_positions</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>  <span class="c1"># of the chains</span>
@@ -685,14 +687,16 @@ a <code>Result</code> object.</p>
 
     <span class="n">rates</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;move&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;kill&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;spawn&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]}</span>
 
-    <span class="n">t</span> <span class="o">=</span> <span class="n">trange</span><span class="p">(</span><span class="n">n_total_steps</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">progress_bar</span> <span class="k">else</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_total_steps</span><span class="p">)</span>
+    <span class="n">t</span><span class="p">:</span> <span class="nb">range</span> <span class="o">|</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm_asyncio</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trange</span><span class="p">(</span><span class="n">n_total_steps</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">progress_bar</span> <span class="k">else</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_total_steps</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">progress_bar</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">info_window_size</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">%</span> <span class="n">info_window_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">info_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="k">for</span> <span class="n">collector</span> <span class="ow">in</span> <span class="n">collectors</span><span class="p">:</span>
                 <span class="n">info_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">collector</span><span class="o">.</span><span class="n">abbreviation</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">collector</span><span class="o">.</span><span class="n">get_recent_average</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">info_window_size</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">; &quot;</span>
-            <span class="n">t</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="n">info_str</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore[attr-defined]</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="n">info_str</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># abort if there are no chains left</span>
         <span class="k">if</span> <span class="n">pos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
@@ -1427,7 +1431,7 @@ as well as a 'mode' in which the sampler operates.</p>
 
     <span class="n">log_evidence</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;log_evidence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">n_particles_wanted</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;n_particles&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="c1"># TODO: should we keep the following?</span>
+
     <span class="k">if</span> <span class="n">log_evidence</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">n_particles_wanted</span><span class="p">:</span>
             <span class="n">mu</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n_initial_particles</span><span class="p">)</span> <span class="o">-</span> <span class="n">log_evidence</span><span class="p">)</span>
@@ -2947,7 +2951,7 @@ based on the proximity of the chains.</p>
     <span class="k">def</span> <span class="nf">get_clean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">burn_in</span> <span class="p">::</span> <span class="bp">self</span><span class="o">.</span><span class="n">thinning</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">get_recent_average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_recent_average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">window_size</span> <span class="p">:</span> <span class="n">i</span><span class="p">])</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3017,7 +3021,7 @@ based on the proximity of the chains.</p>
         <span class="n">expected_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">burn_in</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">thinning</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">log_probability</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+        <span class="n">log_probability</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;hamiltonian&quot;</span><span class="p">,</span> <span class="n">expected_length</span><span class="p">,</span> <span class="n">burn_in</span><span class="p">,</span> <span class="n">thinning</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">state</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">log_probability</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
