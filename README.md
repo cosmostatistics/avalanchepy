@@ -49,20 +49,4 @@ Simply use
 import avalanchepy
 ```
 
-and fire away! To start with, you might consider looking at an [example](???) in the [documentation](???).
-
-@maxiherzog: If we do not plan to host the docs, one might add:
-
-## Documentation
-
-To view the documentation,
-
-```bash
-make docs
-```
-
-and navigate to [http://127.0.0.1:8000/avalanchepy/](http://127.0.0.1:8000/avalanchepy/) in your browser.
-
----
-
-Repository initiated with [fpgmaas/cookiecutter-poetry](https://github.com/fpgmaas/cookiecutter-poetry).
+and fire away! To start with, you might consider looking at our example in the [documentation](maxiherzog.github.io/avalanchepy).
