@@ -25,7 +25,7 @@ make install
 
 ```bash
 conda env create -f environment.yaml       # create conda environment
-micromamba activate avalanchepy-env        # activate environment
+conda activate avalanchepy-env             # activate environment
 pip install -e .                           # install as an editable package
 ```
 
