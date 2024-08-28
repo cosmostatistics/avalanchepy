@@ -11,7 +11,7 @@ Herzog, M. P., von Campe, H., Kuntz, R. M., Röver, L., & Schäfer, B. M. (2023)
 ### Clone from github
 
 ```bash
-git clone git@github.com:cosmostatistics/avalanchepy.git
+git clone https://github.com/cosmostatistics/avalanchepy
 cd avalanchepy
 ```
 
@@ -25,7 +25,7 @@ make install
 
 ```bash
 conda env create -f environment.yaml       # create conda environment
-conda activate avalanchepy-env             # activate environment
+conda activate avalanchepy                 # activate environment
 pip install -e .                           # install as an editable package
 ```
 
@@ -43,4 +43,4 @@ Simply use
 import avalanchepy
 ```
 
-and fire away! To start with, you might consider looking at our example in the [documentation](cosmostatistics.github.io/avalanchepy).
+and fire away! To start with, you might consider looking at our example in the [documentation](https://cosmostatistics.github.io/avalanchepy/).
